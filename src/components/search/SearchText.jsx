@@ -20,7 +20,7 @@ class SearchText extends React.Component {
         />
     };
 };
-//todo: add validation, add fixed size for bar
+//todo: add validation
 const mapStateToProps = (state) => {
     return { wordsToSearch: state.wordsSearch.wordsToSearch }
 };

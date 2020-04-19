@@ -1,46 +1,6 @@
-import { TOGGLE_WORD_VISIBILITY } from "../actionTypes.js";
+import { TOGGLE_WORD_VISIBILITY, SEARCH_WORDS_SUCCESS } from "../actionTypes.js";
 
-const initialState = {
-    searchResults: [{
-        word: "תפוח",
-        results: [{
-            "מורפולוגיה": [
-                "תפוחים",
-                "עוד משהו"
-            ]
-        },
-        {
-            "נושאית": [
-                "עץ"
-            ]
-        }
-        ],
-        isVisible: true
-    },
-    {
-        word: "לימון",
-        results: [{
-            "מורפולוגיה": [
-                "לימונים",
-            ]
-        }],
-        isVisible: true
-    },
-    {
-        word: "ביונסה",
-        results: [{
-            "נושאית": [
-                "לימונדה",
-            ]
-        }],
-        isVisible: true
-    },
-    {
-        word: "למה",
-        results: [],
-        isVisible: true
-    }]
-}
+const initialState = {};
 
 export default function (state = initialState, action) {
     switch (action.type) {
@@ -57,6 +17,8 @@ export default function (state = initialState, action) {
                 })
             };
             return result;
+        case SEARCH_WORDS_SUCCESS:
+            return {...state, searchResults: action.payload.results}
         default:
             return state;
     };

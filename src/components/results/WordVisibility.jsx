@@ -6,7 +6,7 @@ import Chip from '@material-ui/core/Chip';
 
 class WordVisibility extends React.Component {
     render() {
-        const wordChips = this.props.searchResults.map(word => <Chip color={word.isVisible ? "primary" : "default"} onClick={() => this.props.toggleWordVisibility(word.word)} clickable={true} label={word.word} />)
+        const wordChips = this.props.searchResults.map(word => <Chip color={word.isVisible ? "primary" : "default"} onClick={() => this.props.toggleWordVisibility(word.word)} clickable={true} label={word.word} />);
         return wordChips;
     };
 };
