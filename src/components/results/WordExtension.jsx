@@ -4,6 +4,7 @@ import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import { Typography } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
+import { extensionColors, extensionTerms } from '../../design/viewSettings';
 
 const styles = theme => ({
     marginTop: {
@@ -11,16 +12,20 @@ const styles = theme => ({
     },
     margin: {
         margin: theme.spacing(1)
+    },
+    extensionColor:{
+        backgroundColor: (props)=> extensionColors[Object.keys(props.extension)[0]]
     }
 });
 
 class WordExtension extends React.Component {
     render() {
+        const extensionType = Object.keys(this.props.extension)[0];
         const { classes } = this.props;
-        const key = Object.keys(this.props.extension)[0];
+
         return <Paper className={classes.marginTop} elevation={0}>
-            <Chip label={key}></Chip>
-            { this.props.extension[key].map(word => <Badge className={classes.margin} color="secondary" variant="dot"><Typography variant="subtitle1">{word}</Typography></Badge>)}
+            <Chip className={classes.extensionColor} label={extensionTerms[extensionType]}></Chip>
+            {this.props.extension[extensionType].map(word => <Badge classes={{badge: classes.extensionColor}} className={classes.margin} color="secondary" variant="dot"><Typography variant="subtitle1">{word}</Typography></Badge>)}
         </Paper>
     }
 }

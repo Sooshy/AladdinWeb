@@ -1,4 +1,4 @@
-import { ADD_WORD_TO_SEARCH, DELETE_WORD_FROM_SEARCH, TOGGLE_WORD_VISIBILITY, SEARCH_WORDS_BEGIN, SEARCH_WORDS_SUCCESS, SEARCH_WORDS_FALIURE } from "./actionTypes.js";
+import { ADD_WORD_TO_SEARCH, DELETE_WORD_FROM_SEARCH, TOGGLE_WORD_VISIBILITY, SEARCH_WORDS_BEGIN, SEARCH_WORDS_SUCCESS, SEARCH_WORDS_FALIURE, EDIT_SEARCHED_WORDS } from "./actionTypes.js";
 
 export const addWordToSearch = word => ({
     type: ADD_WORD_TO_SEARCH,
@@ -36,5 +36,12 @@ export const searchWordsFaliure = error => ({
     type: SEARCH_WORDS_FALIURE,
     payload: {
         error
+    }
+});
+
+export const editSearchedWords = searchedWords => ({
+    type: EDIT_SEARCHED_WORDS,
+    payload: {
+        searchedWords
     }
 });
