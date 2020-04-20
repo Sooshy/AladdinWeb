@@ -22,14 +22,14 @@ export default function (state = initialState, action) {
             };
         case SEARCH_WORDS_FALIURE:
             return {
-                ...state, error: action.payload.error
+                ...state, error: action.payload.error, isLoading: false
             };
         case SEARCH_WORDS_SUCCESS:
             return {
-                ...state, isLoading: false, wordsToSearch: []
+                ...state, isLoading: false, error: null, wordsToSearch: []
             };
         case EDIT_SEARCHED_WORDS:
-            return{
+            return {
                 ...state, wordsToSearch: action.payload.searchedWords
             }
         default:

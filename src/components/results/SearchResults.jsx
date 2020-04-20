@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper } from "@material-ui/core";
+import { Paper, Typography } from "@material-ui/core";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import WordVisibility from "./WordVisibility";
 import WordsResultsList from "./WordsResultsList";
@@ -11,7 +11,7 @@ const styles = theme => ({
     root: {
         padding: theme.spacing(2),
     },
-    center:{
+    center: {
         placeContent: 'center',
         display: 'flex',
         flexWrap: 'wrap'
@@ -28,14 +28,22 @@ class SearchResults extends React.Component {
         </Paper>;
 
         const loaderView = <Paper className={`${classes.root} ${classes.center}`}><CircularProgress></CircularProgress></Paper>
+        const errorView = <Paper className={`${classes.root} ${classes.center}`}><Typography variant="h3" color="error">חלה שגיאה, נסו שנית</Typography></Paper>
 
-        return this.props.searchResults || this.props.isLoading ?
-            this.props.isLoading ? loaderView : searchResultsView : null;
+        if (this.props.isLoading) {
+            return loaderView;
+        }
+
+        if (this.props.error !== null && !this.props.isLoading) {
+            return errorView;
+        }
+
+        return this.props.searchResults ? searchResultsView : null;
     };
 };
 
 const mapStateToProps = (state) => {
-    return { searchResults: state.results.searchResults, isLoading: state.wordsSearch.isLoading }
+    return { searchResults: state.results.searchResults, isLoading: state.wordsSearch.isLoading, error: state.wordsSearch.error }
 };
 
 export default connect(mapStateToProps)(withStyles(styles)(SearchResults));

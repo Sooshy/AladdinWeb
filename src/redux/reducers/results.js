@@ -1,4 +1,4 @@
-import { TOGGLE_WORD_VISIBILITY, SEARCH_WORDS_SUCCESS } from "../actionTypes.js";
+import { TOGGLE_WORD_VISIBILITY, SEARCH_WORDS_SUCCESS, SEARCH_WORDS_FALIURE } from "../actionTypes.js";
 
 const initialState = {};
 
@@ -18,7 +18,9 @@ export default function (state = initialState, action) {
             };
             return result;
         case SEARCH_WORDS_SUCCESS:
-            return {...state, searchResults: action.payload.results}
+            return { ...state, searchResults: action.payload.results };
+        case SEARCH_WORDS_FALIURE:
+            return { ...state, searchResults: [] }
         default:
             return state;
     };
