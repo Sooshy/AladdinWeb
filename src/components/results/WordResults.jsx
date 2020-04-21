@@ -1,7 +1,7 @@
 import React from "react";
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import WordExtension from "./WordExtension";
+import WordExtensionRow from "./WordExtensionRow";
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -16,7 +16,7 @@ class WordResults extends React.Component {
 
         return <Paper variant="outlined" className={classes.root}>
             <Typography variant="h4">{this.props.wordInfo.word}</Typography>
-            {this.props.wordInfo.results.length !== 0 ? this.props.wordInfo.results.map(extension => <WordExtension extension={extension}></WordExtension>) : <Typography variant="h6" color="error">אין תוצאות</Typography>}
+            {this.props.wordInfo.results.length !== 0 ? this.props.wordInfo.results.map(extension => <WordExtensionRow wordToExtend={this.props.wordInfo.word} extension={extension}></WordExtensionRow>) : <Typography variant="h6" color="error">אין תוצאות</Typography>}
         </Paper>
     }
 }

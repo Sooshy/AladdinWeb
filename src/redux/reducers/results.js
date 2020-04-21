@@ -1,6 +1,8 @@
 import { TOGGLE_WORD_VISIBILITY, SEARCH_WORDS_SUCCESS, SEARCH_WORDS_FALIURE } from "../actionTypes.js";
 
-const initialState = {};
+const initialState = {
+    searchResults: null
+};
 
 export default function (state = initialState, action) {
     switch (action.type) {
