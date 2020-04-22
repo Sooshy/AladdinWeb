@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { exportModeOn, exportModeOff } from '../../redux/actions';
+import { exportModeOn, exportModeOff, exportDialogToggle } from '../../redux/actions';
 
 const styles = theme => ({
     stick: {
@@ -27,7 +27,7 @@ class ExportToggle extends React.Component {
             return null;
         }
         return this.props.exportMode ? <div className={classes.stick}><Tooltip title="בחר אפשרות לייצוא">
-            <Fab className={classes.fab} color="primary"  >
+            <Fab onClick={() => this.props.exportDialogToggle()} className={classes.fab} color="primary"  >
                 <DoneOutlinedIcon></DoneOutlinedIcon>
             </Fab>
         </Tooltip>
@@ -50,7 +50,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ exportModeOn, exportModeOff }, dispatch)
+    return bindActionCreators({ exportModeOn, exportModeOff, exportDialogToggle }, dispatch)
 };
 
 

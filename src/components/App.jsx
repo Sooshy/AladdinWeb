@@ -9,6 +9,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import ExportToggle from './export/ExportToggle';
+import ExportDialog from './export/ExportDialog';
 
 const styles = theme => ({
   root: {
@@ -50,6 +51,7 @@ class App extends React.Component {
         </Grid>
       </div>
       <ExportToggle></ExportToggle>
+      <ExportDialog></ExportDialog>
     </ThemeProvider>
   }
 }

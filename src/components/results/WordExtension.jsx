@@ -5,7 +5,7 @@ import { Typography } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
 import { extensionColors } from '../../design/viewSettings';
 import { bindActionCreators } from "redux";
-import { addWordsToExport, deleteWordFromExport } from "../../redux/actions";
+import { addWordExtensionsToExport, deleteWordExtensionFromExport } from "../../redux/actions";
 import { connect } from "react-redux";
 
 
@@ -56,7 +56,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ addWordsToExport, deleteWordFromExport }, dispatch)
+    return bindActionCreators({ addWordsToExport: addWordExtensionsToExport, deleteWordFromExport: deleteWordExtensionFromExport }, dispatch)
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(WordExtension));

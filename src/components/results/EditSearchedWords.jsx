@@ -17,7 +17,7 @@ class EditSearchedWords extends React.Component {
     render() {
         const { classes } = this.props;
 
-        return <Button className={classes.margin} onClick={()=> this.props.editSearchedWords(this.props.searchedWords)} variant="contained" color="secondary"><EditOutlinedIcon></EditOutlinedIcon></Button>
+        return <Button className={classes.margin} onClick={() => this.props.editSearchedWords(this.props.searchedWords)} variant="contained" color="secondary"><EditOutlinedIcon></EditOutlinedIcon></Button>
     }
 }
 
@@ -28,6 +28,5 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({ editSearchedWords }, dispatch)
 };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(EditSearchedWords));

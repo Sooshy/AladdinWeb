@@ -1,7 +1,8 @@
-import { EXPORT_MODE_ON, EXPORT_MODE_OFF, ADD_WORDS_TO_EXPORT, DELETE_WORD_FROM_EXPORT } from "../actionTypes";
+import { EXPORT_MODE_ON, EXPORT_MODE_OFF, ADD_WORD_EXTENSIONS_TO_EXPORT, DELETE_WORD_EXTENSION_FROM_EXPORT, CANCEL_ALL_MARK_FOR_EXPORT, EXPORT_DIALOG_TOGGLE } from "../actionTypes";
 
 const initialState = {
     exportMode: false,
+    exportDialog: false,
     extensionsByWordToExport: {}
 };
 
@@ -15,7 +16,7 @@ export default function (state = initialState, action) {
             return {
                 ...state, exportMode: false
             };
-        case ADD_WORDS_TO_EXPORT:
+        case ADD_WORD_EXTENSIONS_TO_EXPORT:
             let newExtensionByWordToExport = { ...state.extensionsByWordToExport };
             action.payload.words.forEach(word => {
                 if (newExtensionByWordToExport.hasOwnProperty(word.word)) {
@@ -42,14 +43,22 @@ export default function (state = initialState, action) {
             return {
                 ...state, extensionsByWordToExport: newExtensionByWordToExport
             };
-        case DELETE_WORD_FROM_EXPORT:
+        case DELETE_WORD_EXTENSION_FROM_EXPORT:
             let newExtensionByWordToExportToDelete = { ...state.extensionsByWordToExport };
             newExtensionByWordToExportToDelete[action.payload.word.word][action.payload.word.extensionType] =
-            newExtensionByWordToExportToDelete[action.payload.word.word][action.payload.word.extensionType]
+                newExtensionByWordToExportToDelete[action.payload.word.word][action.payload.word.extensionType]
                     .filter(extension => extension !== action.payload.word.wordExtension);
             return {
                 ...state, extensionsByWordToExport: newExtensionByWordToExportToDelete
             };
+        case CANCEL_ALL_MARK_FOR_EXPORT:
+            return {
+                ...state, extensionsByWordToExport: {}
+            };
+        case EXPORT_DIALOG_TOGGLE:
+            return {
+                ...state, exportDialog: !state.exportDialog
+            }
         default:
             return state;
     };

@@ -6,6 +6,7 @@ import WordsResultsList from "./WordsResultsList";
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from "react-redux";
 import EditSearchedWords from "./EditSearchedWords";
+import MarkForExportActions from "../export/MarkForExportActions";
 
 const styles = theme => ({
     root: {
@@ -24,6 +25,7 @@ class SearchResults extends React.Component {
         const searchResultsView = <Paper className={classes.root}>
             <EditSearchedWords></EditSearchedWords>
             <WordVisibility></WordVisibility>
+            <MarkForExportActions></MarkForExportActions>
             <WordsResultsList></WordsResultsList>
         </Paper>;
 
