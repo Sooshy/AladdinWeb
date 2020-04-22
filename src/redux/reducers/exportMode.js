@@ -1,9 +1,10 @@
-import { EXPORT_MODE_ON, EXPORT_MODE_OFF, ADD_WORD_EXTENSIONS_TO_EXPORT, DELETE_WORD_EXTENSION_FROM_EXPORT, CANCEL_ALL_MARK_FOR_EXPORT, EXPORT_DIALOG_TOGGLE } from "../actionTypes";
+import { EXPORT_MODE_ON, EXPORT_MODE_OFF, ADD_WORD_EXTENSIONS_TO_EXPORT, DELETE_WORD_EXTENSION_FROM_EXPORT, CANCEL_ALL_MARK_FOR_EXPORT, EXPORT_DIALOG_TOGGLE, SEARCH_WORDS_SUCCESS, SHOW_EXPORT_SUCCESS } from "../actionTypes";
 
 const initialState = {
     exportMode: false,
     exportDialog: false,
-    extensionsByWordToExport: {}
+    extensionsByWordToExport: {},
+    showExportSuccess: false
 };
 
 export default function (state = initialState, action) {
@@ -14,7 +15,7 @@ export default function (state = initialState, action) {
             };
         case EXPORT_MODE_OFF:
             return {
-                ...state, exportMode: false
+                ...state, exportMode: false, extensionsByWordToExport: {}
             };
         case ADD_WORD_EXTENSIONS_TO_EXPORT:
             let newExtensionByWordToExport = { ...state.extensionsByWordToExport };
@@ -58,7 +59,15 @@ export default function (state = initialState, action) {
         case EXPORT_DIALOG_TOGGLE:
             return {
                 ...state, exportDialog: !state.exportDialog
-            }
+            };
+        case SEARCH_WORDS_SUCCESS:
+            return {
+                ...state, extensionsByWordToExport: {}
+            };
+        case SHOW_EXPORT_SUCCESS:
+            return {
+                ...state, showExportSuccess: action.payload.exportSuccessStatus
+            };
         default:
             return state;
     };

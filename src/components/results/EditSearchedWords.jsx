@@ -17,12 +17,12 @@ class EditSearchedWords extends React.Component {
     render() {
         const { classes } = this.props;
 
-        return <Button className={classes.margin} onClick={() => this.props.editSearchedWords(this.props.searchedWords)} variant="contained" color="secondary"><EditOutlinedIcon></EditOutlinedIcon></Button>
+        return this.props.exportMode===false ? <Button className={classes.margin} onClick={() => this.props.editSearchedWords(this.props.searchedWords)} variant="contained" color="secondary"><EditOutlinedIcon></EditOutlinedIcon></Button> : null;
     }
 }
 
 const mapStateToProps = (state) => {
-    return { searchedWords: state.results.searchResults.map(result => result.word) }
+    return { searchedWords: state.results.searchResults.map(result => result.word), exportMode: state.exportMode.exportMode }
 };
 
 const mapDispatchToProps = (dispatch) => {

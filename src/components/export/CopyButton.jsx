@@ -1,0 +1,47 @@
+import React from "react";
+import { connect } from "react-redux";
+import { showExportSuccess } from "../../redux/actions";
+import { bindActionCreators } from "redux";
+import { withStyles } from '@material-ui/core/styles';
+import { Button } from "@material-ui/core";
+import copy from 'copy-to-clipboard';
+
+const styles = theme => ({
+    button: {
+        margin: theme.spacing(2)
+    }
+});
+
+class CopyButton extends React.Component {
+
+    stringToCopy = () => {
+        let wordsToString = []
+        Object.values(this.props.extensionsByWordToExport).forEach(extensions => {
+            wordsToString = wordsToString.concat(Object.values(extensions));
+        });;
+        wordsToString = wordsToString.flat();
+        return wordsToString.join(',');
+    };
+
+    copyToClipboard = () => {
+        if(copy(this.stringToCopy())){
+            this.props.showExportSuccess(true);
+        };
+    };
+
+    render() {
+        const { classes } = this.props;
+
+        return <Button onClick={() => this.copyToClipboard()} className={classes.button} variant="contained" color="primary">העתק</Button>;
+    };
+};
+
+const mapStateToProps = (state) => {
+    return { extensionsByWordToExport: state.exportMode.extensionsByWordToExport }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({ showExportSuccess }, dispatch)
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CopyButton));

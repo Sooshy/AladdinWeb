@@ -4,6 +4,6 @@ export const extensionTerms = {
 }
 
 export const extensionColors= {
-    Morphology: "#26c6da",
+    Morphology: "#ea80fc",
     Subject: "#ffeb3b"
 }
