@@ -21,16 +21,17 @@ export default function (state = initialState, action) {
         case ADD_WORD_EXTENSIONS_TO_EXPORT:
             let newExtensionByWordToExport = { ...state.extensionsByWordToExport };
             action.payload.words.forEach(word => {
+                let editedWordAdd = getEditedWord(word, state.editedWords);
                 if (newExtensionByWordToExport.hasOwnProperty(word.word)) {
                     if (newExtensionByWordToExport[word.word].hasOwnProperty(word.extensionType)) {
                         if (!newExtensionByWordToExport[word.word][word.extensionType].includes(word.wordExtension)) {
-                            newExtensionByWordToExport[word.word][word.extensionType].push(word.wordExtension);
+                            newExtensionByWordToExport[word.word][word.extensionType].push(editedWordAdd ? editedWordAdd : word.wordExtension);
                         };
                     }
                     else {
                         newExtensionByWordToExport[word.word][word.extensionType] = [];
                         if (!newExtensionByWordToExport[word.word][word.extensionType].includes(word.wordExtension)) {
-                            newExtensionByWordToExport[word.word][word.extensionType].push(word.wordExtension);
+                            newExtensionByWordToExport[word.word][word.extensionType].push(editedWordAdd ? editedWordAdd : word.wordExtension);
                         };
                     }
                 }
@@ -38,7 +39,7 @@ export default function (state = initialState, action) {
                     newExtensionByWordToExport[word.word] = {};
                     newExtensionByWordToExport[word.word][word.extensionType] = [];
                     if (!newExtensionByWordToExport[word.word][word.extensionType].includes(word.wordExtension)) {
-                        newExtensionByWordToExport[word.word][word.extensionType].push(word.wordExtension);
+                        newExtensionByWordToExport[word.word][word.extensionType].push(editedWordAdd ? editedWordAdd : word.wordExtension);
                     };
                 }
             });
@@ -47,9 +48,11 @@ export default function (state = initialState, action) {
             };
         case DELETE_WORD_EXTENSION_FROM_EXPORT:
             let newExtensionByWordToExportToDelete = { ...state.extensionsByWordToExport };
+            let editedWordDelete = getEditedWord(action.payload.word, state.editedWords);
+            let wordToDelete = editedWordDelete ? editedWordDelete : action.payload.word.wordExtension;
             newExtensionByWordToExportToDelete[action.payload.word.word][action.payload.word.extensionType] =
                 newExtensionByWordToExportToDelete[action.payload.word.word][action.payload.word.extensionType]
-                    .filter(extension => extension !== action.payload.word.wordExtension);
+                    .filter(extension => extension !== wordToDelete);
             return {
                 ...state, extensionsByWordToExport: newExtensionByWordToExportToDelete
             };
@@ -82,4 +85,14 @@ export default function (state = initialState, action) {
         default:
             return state;
     };
+};
+
+const getEditedWord = (wordInfo, editedWords) => {
+    let editedWordFiltered = editedWords.filter(editedWord => editedWord.word === wordInfo.word && editedWord.wordExtension === wordInfo.wordExtension && editedWord.extensionType === wordInfo.extensionType);
+    if (editedWordFiltered.length === 1) {
+        return editedWordFiltered[0].editedWord;
+    }
+    else {
+        return null;
+    }
 };

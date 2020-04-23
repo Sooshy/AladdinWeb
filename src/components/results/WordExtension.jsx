@@ -31,20 +31,6 @@ class WordExtension extends React.Component {
         this.state = { editMode: false, editValue: this.props.word };
     };
 
-    isWordMarkedForExport = () => {
-        if (this.props.extensionsByWordToExport.hasOwnProperty(this.props.wordToExtend)) {
-            if (this.props.extensionsByWordToExport[this.props.wordToExtend].hasOwnProperty(this.props.extensionType)) {
-                return this.props.extensionsByWordToExport[this.props.wordToExtend][this.props.extensionType].includes(this.props.word);
-            }
-            else {
-                return false;
-            }
-        }
-        else {
-            return false;
-        };
-    };
-
     getEditedWord = () => {
         let editedWordFiltered = this.props.editedWords.filter(editedWord => editedWord.word === this.props.wordToExtend && editedWord.wordExtension === this.props.word && editedWord.extensionType === this.props.extensionType);
         if (editedWordFiltered.length === 1) {
@@ -53,6 +39,20 @@ class WordExtension extends React.Component {
         else {
             return null;
         }
+    };
+
+    isWordMarkedForExport = (word) => {
+        if (this.props.extensionsByWordToExport.hasOwnProperty(this.props.wordToExtend)) {
+            if (this.props.extensionsByWordToExport[this.props.wordToExtend].hasOwnProperty(this.props.extensionType)) {
+                return this.props.extensionsByWordToExport[this.props.wordToExtend][this.props.extensionType].includes(word);
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        };
     };
 
     handleEditValueChange = (event) => {
@@ -80,7 +80,7 @@ class WordExtension extends React.Component {
             return baseWordView;
         };
 
-        if (this.isWordMarkedForExport()) {
+        if (this.isWordMarkedForExport(isWordEdited ? editedWord : this.props.word)) {
             return <Chip onClick={() => this.props.deleteWordFromExport({ word: this.props.wordToExtend, extensionType: this.props.extensionType, wordExtension: this.props.word })} className={classes.margin} color="primary" label={baseWordView}></Chip>
         };
 
@@ -91,7 +91,7 @@ class WordExtension extends React.Component {
         if (isWordEdited) {
             return <Chip deleteIcon={<UndoOutlinedIcon />} onDelete={() => { this.props.removeEditedWordExtension({ word: this.props.wordToExtend, wordExtension: this.props.word, extensionType: this.props.extensionType, editedWord: editedWord }); this.setState({ editValue: this.props.word }) }} onClick={() => this.props.addWordsToExport([{ word: this.props.wordToExtend, extensionType: this.props.extensionType, wordExtension: this.props.word }])} className={classes.margin} label={baseWordView}></Chip>
         }
-        return <Chip deleteIcon={<EditOutlinedIcon />} onDelete={() => { this.setState({ editMode: true }) }} onClick={() => this.props.addWordsToExport([{ word: this.props.wordToExtend, extensionType: this.props.extensionType, wordExtension: this.props.word }])} className={classes.margin} label={baseWordView}></Chip>
+        return <Chip deleteIcon={<EditOutlinedIcon />} onDelete={() => { this.setState({ editMode: true, editValue: isWordEdited ? editedWord : this.props.word }) }} onClick={() => this.props.addWordsToExport([{ word: this.props.wordToExtend, extensionType: this.props.extensionType, wordExtension: this.props.word }])} className={classes.margin} label={baseWordView}></Chip>
     }
 }
 
