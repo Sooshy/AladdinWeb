@@ -5,10 +5,11 @@ import { Typography } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
 import { extensionColors } from '../../design/viewSettings';
 import { bindActionCreators } from "redux";
-import { addWordExtensionsToExport, deleteWordExtensionFromExport } from "../../redux/actions";
+import { addWordExtensionsToExport, deleteWordExtensionFromExport, addEditedWordExtension, removeEditedWordExtension } from "../../redux/actions";
 import { connect } from "react-redux";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DoneOutlinedIcon from '@material-ui/icons/DoneOutlined';
+import UndoOutlinedIcon from '@material-ui/icons/UndoOutlined';
 import TextField from '@material-ui/core/TextField';
 
 const styles = theme => ({
@@ -27,7 +28,7 @@ class WordExtension extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { editMode: false };
+        this.state = { editMode: false, editValue: this.props.word };
     };
 
     isWordMarkedForExport = () => {
@@ -44,11 +45,37 @@ class WordExtension extends React.Component {
         };
     };
 
+    getEditedWord = () => {
+        let editedWordFiltered = this.props.editedWords.filter(editedWord => editedWord.word === this.props.wordToExtend && editedWord.wordExtension === this.props.word && editedWord.extensionType === this.props.extensionType);
+        if (editedWordFiltered.length === 1) {
+            return editedWordFiltered[0].editedWord;
+        }
+        else {
+            return null;
+        }
+    };
+
+    handleEditValueChange = (event) => {
+        this.setState({ editValue: event.target.value })
+    };
+
+    handleSubmitEdit = () => {
+        if (this.state.editValue !== this.props.word && this.state.editValue !== "") {
+            this.props.addEditedWordExtension({ word: this.props.wordToExtend, wordExtension: this.props.word, extensionType: this.props.extensionType, editedWord: this.state.editValue });
+        }
+        else {
+            this.setState({ editValue: this.props.word });
+        }
+    }
     render() {
         const { classes } = this.props;
 
-        const baseWordView = <Badge classes={{ badge: classes.extensionColor }} className={classes.margin} variant="dot"><Typography variant="subtitle1">{this.props.word}</Typography></Badge>;
-        const editWordView = <TextField  className={classes.textArea} defaultValue={this.props.word} />
+        const editedWord = this.getEditedWord();
+        const isWordEdited = editedWord !== null;
+
+        const baseWordView = <Badge classes={{ badge: classes.extensionColor }} className={classes.margin} variant="dot"><Typography variant="subtitle1">{!isWordEdited ? this.props.word : editedWord}</Typography></Badge>;
+        const editWordView = <TextField onChange={this.handleEditValueChange} className={classes.textArea} value={this.state.editValue} />
+
         if (!this.props.exportMode) {
             return baseWordView;
         };
@@ -58,19 +85,22 @@ class WordExtension extends React.Component {
         };
 
         if (this.state.editMode) {
-            return <Chip deleteIcon={<DoneOutlinedIcon />} onDelete={() => { this.setState({ editMode: false }) }} className={`${classes.margin}`} label={editWordView}></Chip>
+            return <Chip deleteIcon={<DoneOutlinedIcon />} onDelete={() => { this.setState({ editMode: false }); this.handleSubmitEdit() }} className={`${classes.margin}`} label={editWordView}></Chip>
         };
 
+        if (isWordEdited) {
+            return <Chip deleteIcon={<UndoOutlinedIcon />} onDelete={() => { this.props.removeEditedWordExtension({ word: this.props.wordToExtend, wordExtension: this.props.word, extensionType: this.props.extensionType, editedWord: editedWord }); this.setState({ editValue: this.props.word }) }} onClick={() => this.props.addWordsToExport([{ word: this.props.wordToExtend, extensionType: this.props.extensionType, wordExtension: this.props.word }])} className={classes.margin} label={baseWordView}></Chip>
+        }
         return <Chip deleteIcon={<EditOutlinedIcon />} onDelete={() => { this.setState({ editMode: true }) }} onClick={() => this.props.addWordsToExport([{ word: this.props.wordToExtend, extensionType: this.props.extensionType, wordExtension: this.props.word }])} className={classes.margin} label={baseWordView}></Chip>
     }
 }
 
 const mapStateToProps = (state) => {
-    return { exportMode: state.exportMode.exportMode, extensionsByWordToExport: state.exportMode.extensionsByWordToExport }
+    return { exportMode: state.exportMode.exportMode, extensionsByWordToExport: state.exportMode.extensionsByWordToExport, editedWords: state.exportMode.editedWords }
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ addWordsToExport: addWordExtensionsToExport, deleteWordFromExport: deleteWordExtensionFromExport }, dispatch)
+    return bindActionCreators({ addWordsToExport: addWordExtensionsToExport, deleteWordFromExport: deleteWordExtensionFromExport, addEditedWordExtension: addEditedWordExtension, removeEditedWordExtension: removeEditedWordExtension }, dispatch)
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(WordExtension));

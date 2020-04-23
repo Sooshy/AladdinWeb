@@ -1,10 +1,11 @@
-import { EXPORT_MODE_ON, EXPORT_MODE_OFF, ADD_WORD_EXTENSIONS_TO_EXPORT, DELETE_WORD_EXTENSION_FROM_EXPORT, CANCEL_ALL_MARK_FOR_EXPORT, EXPORT_DIALOG_TOGGLE, SEARCH_WORDS_SUCCESS, SHOW_EXPORT_SUCCESS } from "../actionTypes";
+import { EXPORT_MODE_ON, EXPORT_MODE_OFF, ADD_WORD_EXTENSIONS_TO_EXPORT, DELETE_WORD_EXTENSION_FROM_EXPORT, CANCEL_ALL_MARK_FOR_EXPORT, EXPORT_DIALOG_TOGGLE, SEARCH_WORDS_SUCCESS, SHOW_EXPORT_SUCCESS, ADD_EDITED_WORD_EXTENSION, REMOVE_EDITED_WORD_EXTENSION } from "../actionTypes";
 
 const initialState = {
     exportMode: false,
     exportDialog: false,
     extensionsByWordToExport: {},
-    showExportSuccess: false
+    showExportSuccess: false,
+    editedWords: []
 };
 
 export default function (state = initialState, action) {
@@ -15,7 +16,7 @@ export default function (state = initialState, action) {
             };
         case EXPORT_MODE_OFF:
             return {
-                ...state, exportMode: false, extensionsByWordToExport: {}
+                ...state, exportMode: false, extensionsByWordToExport: {}, editedWords: []
             };
         case ADD_WORD_EXTENSIONS_TO_EXPORT:
             let newExtensionByWordToExport = { ...state.extensionsByWordToExport };
@@ -67,6 +68,16 @@ export default function (state = initialState, action) {
         case SHOW_EXPORT_SUCCESS:
             return {
                 ...state, showExportSuccess: action.payload.exportSuccessStatus
+            };
+        case ADD_EDITED_WORD_EXTENSION:
+            let filtered = state.editedWords.filter(editedWord => editedWord.word !== action.payload.wordInfo.word || editedWord.wordExtension !== action.payload.wordInfo.wordExtension || editedWord.extensionType !== action.payload.wordInfo.extensionType || editedWord.editedWord !== action.payload.wordInfo.editedWord);
+            let result = [...filtered, action.payload.wordInfo]
+            return {
+                ...state, editedWords: result
+            };
+        case REMOVE_EDITED_WORD_EXTENSION:
+            return {
+                ...state, editedWords: state.editedWords.filter(editedWord => editedWord.word !== action.payload.wordInfo.word || editedWord.wordExtension !== action.payload.wordInfo.wordExtension || editedWord.extensionType !== action.payload.wordInfo.extensionType || editedWord.editedWord !== action.payload.wordInfo.editedWord)
             };
         default:
             return state;
