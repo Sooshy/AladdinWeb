@@ -5,8 +5,9 @@ import { exportDialogToggle, showExportSuccess } from "../../redux/actions";
 import { withStyles } from '@material-ui/core/styles';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
-import { Button, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import CopyButton from "./CopyButton";
+import CsvButton from "./CsvButton";
 
 const styles = theme => ({
     title: {
@@ -16,9 +17,6 @@ const styles = theme => ({
         placeContent: 'center',
         display: 'flex',
         flexWrap: 'wrap'
-    },
-    button: {
-        margin: theme.spacing(2)
     }
 });
 
@@ -36,7 +34,7 @@ class ExportDialog extends React.Component {
         return <Dialog open={this.props.open} onClose={() => this.onClose()}>
             <DialogTitle className={classes.title}>בחר אפשרות לייצוא:</DialogTitle>
             <div className={classes.center}>
-                <Button className={classes.button} variant="contained" color="primary">אקסל</Button>
+                <CsvButton></CsvButton>
                 <CopyButton></CopyButton>
             </div>
             {successMessage}
