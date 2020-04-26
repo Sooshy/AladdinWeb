@@ -23,21 +23,25 @@ const styles = theme => ({
 class ExportToggle extends React.Component {
     render() {
         const { classes } = this.props;
-        if (this.props.searchResults === null) {
+        if (this.props.searchResults === null || this.props.searchResults.length === 0) {
             return null;
         }
-        return this.props.exportMode ? <div className={classes.stick}><Tooltip title="בחר אפשרות לייצוא">
-            <Fab onClick={() => this.props.exportDialogToggle()} className={classes.fab} color="primary"  >
-                <DoneOutlinedIcon></DoneOutlinedIcon>
-            </Fab>
-        </Tooltip>
+
+        const chooseExportOption = this.props.wordsToExport === null || this.props.wordsToExport.length === 0 ? <Fab disabled className={classes.fab} color="primary"  >
+            <DoneOutlinedIcon></DoneOutlinedIcon>
+        </Fab> : <Tooltip title="בחר אפשרות לייצוא">
+                <Fab onClick={() => this.props.exportDialogToggle()} className={classes.fab} color="primary">
+                    <DoneOutlinedIcon></DoneOutlinedIcon>
+                </Fab>
+            </Tooltip>;
+        return this.props.exportMode ? <div className={classes.stick}>{chooseExportOption}
             <Tooltip title="בטל">
                 <Fab size="small" onClick={() => this.props.exportModeOff()} className={classes.fab}>
                     <ClearOutlinedIcon></ClearOutlinedIcon>
                 </Fab>
             </Tooltip></div>
             : <div className={classes.stick}><Tooltip title="יצוא">
-                <Fab onClick={() => this.props.exportModeOn()} className={classes.fab} color="secondary"  >
+                <Fab onClick={() => this.props.exportModeOn()} className={classes.fab} color="secondary">
                     <SendOutlinedIcon></SendOutlinedIcon>
                 </Fab>
             </Tooltip>
@@ -46,7 +50,7 @@ class ExportToggle extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    return { exportMode: state.exportMode.exportMode, searchResults: state.results.searchResults }
+    return { exportMode: state.exportMode.exportMode, searchResults: state.results.searchResults, wordsToExport: state.exportMode.wordsToExport }
 };
 
 const mapDispatchToProps = (dispatch) => {
