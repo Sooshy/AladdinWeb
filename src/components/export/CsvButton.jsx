@@ -21,7 +21,7 @@ class CsvButton extends React.Component {
 };
 
 const mapStateToProps = (state) => {
-    return { extensionsByWordToExport: state.exportMode.extensionsByWordToExport }
+    return { wordsToExport: state.exportMode.wordsToExport }
 };
 
 const mapDispatchToProps = (dispatch) => {

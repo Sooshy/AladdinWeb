@@ -42,7 +42,7 @@ class ExportDialog extends React.Component {
     };
 };
 const mapStateToProps = (state) => {
-    return { open: state.exportMode.exportDialog, showExportSuccessStatus: state.exportMode.showExportSuccess, extensionsByWordToExport: state.exportMode.extensionsByWordToExport }
+    return { open: state.exportMode.exportDialog, showExportSuccessStatus: state.exportMode.showExportSuccess, wordsToExport: state.exportMode.wordsToExport }
 };
 
 const mapDispatchToProps = (dispatch) => {

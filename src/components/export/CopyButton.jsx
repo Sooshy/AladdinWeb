@@ -15,16 +15,12 @@ const styles = theme => ({
 class CopyButton extends React.Component {
 
     stringToCopy = () => {
-        let wordsToString = []
-        Object.values(this.props.extensionsByWordToExport).forEach(extensions => {
-            wordsToString = wordsToString.concat(Object.values(extensions));
-        });;
-        wordsToString = wordsToString.flat();
+        let wordsToString = this.props.wordsToExport.map(wordInfo => wordInfo.editedWord ? wordInfo.editedWord : wordInfo.wordExtension );
         return wordsToString.join(',');
     };
 
     copyToClipboard = () => {
-        if(copy(this.stringToCopy())){
+        if (copy(this.stringToCopy())) {
             this.props.showExportSuccess(true);
         };
     };
@@ -37,7 +33,7 @@ class CopyButton extends React.Component {
 };
 
 const mapStateToProps = (state) => {
-    return { extensionsByWordToExport: state.exportMode.extensionsByWordToExport }
+    return { wordsToExport: state.exportMode.wordsToExport }
 };
 
 const mapDispatchToProps = (dispatch) => {

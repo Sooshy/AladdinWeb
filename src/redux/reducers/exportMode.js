@@ -3,7 +3,7 @@ import { EXPORT_MODE_ON, EXPORT_MODE_OFF, ADD_WORD_EXTENSIONS_TO_EXPORT, DELETE_
 const initialState = {
     exportMode: false,
     exportDialog: false,
-    extensionsByWordToExport: {},
+    wordsToExport: [],
     showExportSuccess: false,
     editedWords: []
 };
@@ -16,49 +16,25 @@ export default function (state = initialState, action) {
             };
         case EXPORT_MODE_OFF:
             return {
-                ...state, exportMode: false, extensionsByWordToExport: {}, editedWords: []
+                ...state, exportMode: false, wordsToExport: [], editedWords: []
             };
         case ADD_WORD_EXTENSIONS_TO_EXPORT:
-            let newExtensionByWordToExport = { ...state.extensionsByWordToExport };
+            let newExtensionByWordToExport = [...state.wordsToExport];
             action.payload.words.forEach(word => {
                 let editedWordAdd = getEditedWord(word, state.editedWords);
-                if (newExtensionByWordToExport.hasOwnProperty(word.word)) {
-                    if (newExtensionByWordToExport[word.word].hasOwnProperty(word.extensionType)) {
-                        if (!newExtensionByWordToExport[word.word][word.extensionType].includes(word.wordExtension)) {
-                            newExtensionByWordToExport[word.word][word.extensionType].push(editedWordAdd ? editedWordAdd : word.wordExtension);
-                        };
-                    }
-                    else {
-                        newExtensionByWordToExport[word.word][word.extensionType] = [];
-                        if (!newExtensionByWordToExport[word.word][word.extensionType].includes(word.wordExtension)) {
-                            newExtensionByWordToExport[word.word][word.extensionType].push(editedWordAdd ? editedWordAdd : word.wordExtension);
-                        };
-                    }
-                }
-                else {
-                    newExtensionByWordToExport[word.word] = {};
-                    newExtensionByWordToExport[word.word][word.extensionType] = [];
-                    if (!newExtensionByWordToExport[word.word][word.extensionType].includes(word.wordExtension)) {
-                        newExtensionByWordToExport[word.word][word.extensionType].push(editedWordAdd ? editedWordAdd : word.wordExtension);
-                    };
-                }
+                newExtensionByWordToExport = newExtensionByWordToExport.filter(wordInfo => wordInfo.word !== word.word || wordInfo.wordExtension !== word.wordExtension || wordInfo.extensionType !== word.extensionType);
+                newExtensionByWordToExport = [...newExtensionByWordToExport, { word: word.word, wordExtension: word.wordExtension, extensionType: word.extensionType, editedWord: editedWordAdd }]
             });
             return {
-                ...state, extensionsByWordToExport: newExtensionByWordToExport
+                ...state, wordsToExport: newExtensionByWordToExport
             };
         case DELETE_WORD_EXTENSION_FROM_EXPORT:
-            let newExtensionByWordToExportToDelete = { ...state.extensionsByWordToExport };
-            let editedWordDelete = getEditedWord(action.payload.word, state.editedWords);
-            let wordToDelete = editedWordDelete ? editedWordDelete : action.payload.word.wordExtension;
-            newExtensionByWordToExportToDelete[action.payload.word.word][action.payload.word.extensionType] =
-                newExtensionByWordToExportToDelete[action.payload.word.word][action.payload.word.extensionType]
-                    .filter(extension => extension !== wordToDelete);
             return {
-                ...state, extensionsByWordToExport: newExtensionByWordToExportToDelete
+                ...state, wordsToExport: state.wordsToExport.filter(wordInfo => wordInfo.word !== action.payload.word.word || wordInfo.wordExtension !== action.payload.word.wordExtension || wordInfo.extensionType !== action.payload.word.extensionType)
             };
         case CANCEL_ALL_MARK_FOR_EXPORT:
             return {
-                ...state, extensionsByWordToExport: {}
+                ...state, wordsToExport: []
             };
         case EXPORT_DIALOG_TOGGLE:
             return {
@@ -66,7 +42,7 @@ export default function (state = initialState, action) {
             };
         case SEARCH_WORDS_SUCCESS:
             return {
-                ...state, extensionsByWordToExport: {}
+                ...state, wordsToExport: []
             };
         case SHOW_EXPORT_SUCCESS:
             return {

@@ -35,24 +35,16 @@ class WordExtension extends React.Component {
         let editedWordFiltered = this.props.editedWords.filter(editedWord => editedWord.word === this.props.wordToExtend && editedWord.wordExtension === this.props.word && editedWord.extensionType === this.props.extensionType);
         if (editedWordFiltered.length === 1) {
             return editedWordFiltered[0].editedWord;
-        }
-        else {
-            return null;
-        }
+        };
+        return null;
     };
 
-    isWordMarkedForExport = (word) => {
-        if (this.props.extensionsByWordToExport.hasOwnProperty(this.props.wordToExtend)) {
-            if (this.props.extensionsByWordToExport[this.props.wordToExtend].hasOwnProperty(this.props.extensionType)) {
-                return this.props.extensionsByWordToExport[this.props.wordToExtend][this.props.extensionType].includes(word);
-            }
-            else {
-                return false;
-            }
-        }
-        else {
-            return false;
+    isWordMarkedForExport = () => {
+        let wordsToExportFiltered = this.props.wordsToExport.filter(word => word.word === this.props.wordToExtend && word.wordExtension === this.props.word && word.extensionType === this.props.extensionType);
+        if (wordsToExportFiltered.length === 1) {
+            return true;
         };
+        return false;
     };
 
     handleEditValueChange = (event) => {
@@ -80,7 +72,7 @@ class WordExtension extends React.Component {
             return baseWordView;
         };
 
-        if (this.isWordMarkedForExport(isWordEdited ? editedWord : this.props.word)) {
+        if (this.isWordMarkedForExport()) {
             return <Chip onClick={() => this.props.deleteWordFromExport({ word: this.props.wordToExtend, extensionType: this.props.extensionType, wordExtension: this.props.word })} className={classes.margin} color="primary" label={baseWordView}></Chip>
         };
 
@@ -96,7 +88,7 @@ class WordExtension extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    return { exportMode: state.exportMode.exportMode, extensionsByWordToExport: state.exportMode.extensionsByWordToExport, editedWords: state.exportMode.editedWords }
+    return { exportMode: state.exportMode.exportMode, wordsToExport: state.exportMode.wordsToExport, editedWords: state.exportMode.editedWords }
 };
 
 const mapDispatchToProps = (dispatch) => {
